@@ -29,7 +29,9 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -79,9 +81,20 @@ class MainActivity : ComponentActivity() {
 
 
             CalendrAppConcptTheme {
-                Calendar(
-                    viewModel = ViewModel
-                )
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+
+                    NavApp(
+                        viewModel = ViewModel,
+                        )
+
+
+
+
+                    }
+
             }
         }
     }
@@ -99,7 +112,8 @@ data class MonthData(
 
 @Composable
 fun Calendar(
-    viewModel: CalendarViewModel
+    viewModel: CalendarViewModel,
+    onFinish: () -> Unit
 ) {
     val now = LocalDate.now()
 
@@ -128,7 +142,31 @@ fun Calendar(
     Column (
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
+
     ) {
+
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+
+            IconButton(
+                onClick = {
+                    onFinish()
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Previous Month"
+                )
+            }
+
+        }
+
+
         MonthScreen(
             month = months[currentMonth],
             onPrevious = {
@@ -186,7 +224,6 @@ fun MonthScreen(
 
     ) {
 
-        Spacer(modifier = Modifier.height(32.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -262,8 +299,15 @@ fun MonthScreen(
                             .aspectRatio(1f)
                             .background(color =
                                 if (LocalDate.now().dayOfMonth == day && LocalDate.now().monthValue == month.month && LocalDate.now().year == month.year) {
-                                    Color.Red
+                                    if(selectedDay.dayOfMonth == day && selectedDay.monthValue == month.month && selectedDay.year == month.year) {
+                                        Color.Red
+                                    }
+                                    else {
+                                        Color.Cyan
+
+                                    }
                                 }
+
                                 else {
                                     if (selectedDay.dayOfMonth == day && selectedDay.monthValue == month.month && selectedDay.year == month.year) {
                                         Color.Green
@@ -311,6 +355,7 @@ fun NotesForSpecDay(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
+            .verticalScroll(rememberScrollState()),
     ) {
         Text(text = "Day: $Date")
 
@@ -332,10 +377,10 @@ fun NotesForSpecDay(
         Text("Notes count: ${notes.size}")
 
         notes.forEach { item ->
-            Text(
-                text = item.title,
-                modifier = Modifier.padding(vertical = 4.dp)
-            )
+            Text(text = item.title,)
+            Text(text = item.Contents)
+            Text(text = item.date.toString())
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
