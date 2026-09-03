@@ -5,11 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import kotlin.random.Random
 
 
 class CalendarViewModel(
@@ -64,4 +66,16 @@ class CalendarViewModel(
 
         }
     }
+
+
+    private val _randomNote = MutableStateFlow<CalendarItem?>(null)
+    val randomNote = _randomNote.asStateFlow()
+
+    fun getRandomById() {
+        viewModelScope.launch {
+            _randomNote.value = dao.getRandomItem()
+        }
+    }
+
+
 }

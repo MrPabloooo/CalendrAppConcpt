@@ -25,6 +25,8 @@ interface CalendarItemDao {
 """)
     fun getNoteForDay(date: String): Flow<List<CalendarItem>>
 
+    @Query("SELECT * FROM calendaritem ORDER BY RANDOM() LIMIT 1")
+    suspend fun getRandomItem(): CalendarItem?
 
 
 

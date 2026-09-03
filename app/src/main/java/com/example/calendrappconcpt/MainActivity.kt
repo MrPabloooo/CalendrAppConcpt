@@ -43,8 +43,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.room.Room
 import com.example.calendrappconcpt.ui.theme.CalendrAppConcptTheme
@@ -247,10 +249,19 @@ fun MonthScreen(
 
 
             if (month.year != LocalDate.now().year) {
-                Text(text = "${month.name} ${month.year} ")
+                Text(
+                    text = "${month.name} ${month.year} ".uppercase(),
+                    fontWeight = Bold,
+                    fontSize = 32.sp
+                )
             }
             else {
-                Text(text = "${month.name}")
+                Text(
+                    text = ("${month.name}").uppercase(),
+                    fontWeight = Bold,
+                    fontSize = 32.sp
+
+                    )
             }
 
 
@@ -357,30 +368,28 @@ fun NotesForSpecDay(
             .padding(16.dp)
             .verticalScroll(rememberScrollState()),
     ) {
-        Text(text = "Day: $Date")
-
-        Button(
-            onClick = {
-                viewModel.addCalendarItem(
-                    CalendarItem(
-                        title = "Note",
-                        Icon = "Icon",
-                        Contents = "NoteCont...",
-                        date = todayDate
-                    )
-                )
-            }
-        ) {
-            Text("Add note")
-        }
-
-        Text("Notes count: ${notes.size}")
+//        Text(text = "Day: $Date")
+//
+//
+//
+//        Text("Notes count: ${notes.size}")
 
         notes.forEach { item ->
-            Text(text = item.title,)
-            Text(text = item.Contents)
-            Text(text = item.date.toString())
-            Spacer(modifier = Modifier.height(8.dp))
+//            Text(text = item.title,)
+//            Text(text = item.Contents)
+//            Text(text = item.date.toString())
+//            Spacer(modifier = Modifier.height(8.dp))
+
+            CardScreen(
+                Title = item.title,
+                Icon = item.Icon,
+                Contents = item.Contents,
+                AdditionalInfo = "",
+                Date = item.date.toString(),
+                Refreshable = false,
+
+            )
+
         }
     }
 }
