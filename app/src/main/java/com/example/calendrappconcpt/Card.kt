@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.material3.Text
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.BlendMode.Companion.Color
+import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,34 +43,51 @@ fun CardScreen(
                 .padding(5.dp)
                 .fillMaxWidth()
                 .drawBehind {
-                    // Tło kartki
-                    drawRoundRect(
-                        color = Color(0xFFFFF59D),
-                        cornerRadius = CornerRadius(75f, 75f)
-                    )
+                    val radius = 40.dp.toPx()
 
-                    // Linie
-                    val lineSpacing = lineHeight.toPx()
-                    var y = 70.dp.toPx()
-
-                    while (y < size.height) {
-                        drawLine(
-                            color = Color(0xFFB0BEC5),
-                            start = Offset(0f, y),
-                            end = Offset(size.width, y),
-                            strokeWidth = 2f
+                    // Przytnij wszystko do rounded rect
+                    clipPath(
+                        path = androidx.compose.ui.graphics.Path().apply {
+                            addRoundRect(
+                                androidx.compose.ui.geometry.RoundRect(
+                                    left = 0f,
+                                    top = 0f,
+                                    right = size.width,
+                                    bottom = size.height,
+                                    cornerRadius = CornerRadius(radius, radius)
+                                )
+                            )
+                        }
+                    ) {
+                        // Tło kartki
+                        drawRoundRect(
+                            color = Color(0xFFFFF59D),
+                            cornerRadius = CornerRadius(radius, radius)
                         )
 
-                        y += lineSpacing
-                    }
+                        // Linie
+                        val lineSpacing = lineHeight.toPx()
+                        var y = 70.dp.toPx()
 
-                    // Czerwony margines
-                    drawLine(
-                        color = Color(0xFFE57373),
-                        start = Offset(30.dp.toPx(), 0f),
-                        end = Offset(30.dp.toPx(), size.height),
-                        strokeWidth = 3f
-                    )
+                        while (y < size.height) {
+                            drawLine(
+                                color = Color(0xFFB0BEC5),
+                                start = Offset(0f, y),
+                                end = Offset(size.width, y),
+                                strokeWidth = 2f
+                            )
+
+                            y += lineSpacing
+                        }
+
+                        // Czerwony margines
+                        drawLine(
+                            color = Color(0xFFE57373),
+                            start = Offset(30.dp.toPx(), 0f),
+                            end = Offset(30.dp.toPx(), size.height),
+                            strokeWidth = 3f
+                        )
+                    }
                 }
                 .padding(
                     start = 45.dp,

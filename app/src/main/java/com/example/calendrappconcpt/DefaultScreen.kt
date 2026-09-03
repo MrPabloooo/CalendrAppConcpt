@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Refresh
@@ -61,9 +63,11 @@ fun DefaultScreen(
 
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
+
     ) {
 
         val todayDate = LocalDate.now()
@@ -81,13 +85,7 @@ fun DefaultScreen(
         val days = randomNote?.let {
             ChronoUnit.DAYS.between(todayDate, it.date)
         }
-        Column (
-            modifier = Modifier
-                .fillMaxWidth()
 
-
-        )
-        {
             Spacer(modifier = Modifier.height(32.dp))
 
             Text(
@@ -134,7 +132,7 @@ fun DefaultScreen(
 
 
 
-        }
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
