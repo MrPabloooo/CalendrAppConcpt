@@ -32,6 +32,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -294,19 +295,24 @@ fun MonthScreen(
     }
 }
 
-
 @Composable
-fun NotesForSpecDay (
+fun NotesForSpecDay(
     Date: LocalDate,
     viewModel: CalendarViewModel
 ) {
 
+    val todayDate = LocalDate.now()
+
+    val notes by viewModel
+        .getNotes(Date)
+        .collectAsState(initial = emptyList())
+
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.Blue)
+            .fillMaxWidth()
+            .padding(16.dp)
     ) {
-        Text("Day: " + Date)
+        Text(text = "Day: $Date")
 
         Button(
             onClick = {
@@ -315,21 +321,21 @@ fun NotesForSpecDay (
                         title = "Note",
                         Icon = "Icon",
                         Contents = "NoteCont...",
-                        date = Date
+                        date = todayDate
                     )
                 )
             }
-        ) { }
-        val todayNote = viewModel.getNotes(Date)
+        ) {
+            Text("Add note")
+        }
 
-        for (todayNote.)
-        Text(
+        Text("Notes count: ${notes.size}")
 
-
-
-        )
-
-
+        notes.forEach { item ->
+            Text(
+                text = item.title,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
+        }
     }
-
 }

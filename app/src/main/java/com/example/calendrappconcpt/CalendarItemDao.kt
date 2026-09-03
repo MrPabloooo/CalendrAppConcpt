@@ -19,14 +19,11 @@ interface CalendarItemDao {
     suspend fun getNote(id: Long): CalendarItem?
 
     @Query("""
-        SELECT * FROM calendaritem 
-        WHERE date BETWEEN :startOfDay AND :endOfDay
-        ORDER BY date DESC
-    """)
-    fun getProductsForDay(
-        startOfDay: Long,
-        endOfDay: Long
-    ): Flow<List<CalendarItem>>
+    SELECT * FROM calendaritem 
+    WHERE date = :date
+    ORDER BY date DESC
+""")
+    fun getNoteForDay(date: String): Flow<List<CalendarItem>>
 
 
 

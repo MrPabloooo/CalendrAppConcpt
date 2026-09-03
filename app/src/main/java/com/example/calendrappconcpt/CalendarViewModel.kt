@@ -3,11 +3,13 @@ package com.example.calendrappconcpt
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 
 class CalendarViewModel(
@@ -33,14 +35,10 @@ class CalendarViewModel(
         return start to end
     }
 
-    fun getNotes(date: LocalDate) =
-        dao.getProductsForDay(
-            getDayRange(date).first,
-            getDayRange(date).second
-        ).map { items ->
-            items.map { it }
-        }
-
+    fun getNotes(date: LocalDate): Flow<List<CalendarItem>> =
+        dao.getNoteForDay(
+            date.format(DateTimeFormatter.ISO_LOCAL_DATE)
+        )
 
     fun logDatabase() {
         viewModelScope.launch {
