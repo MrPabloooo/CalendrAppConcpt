@@ -1,6 +1,7 @@
 package com.example.calendrappconcpt
 
 import android.os.Bundle
+import android.widget.CalendarView
 import android.widget.Space
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -41,21 +42,45 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.room.Room
 import com.example.calendrappconcpt.ui.theme.CalendrAppConcptTheme
 import java.time.LocalDate
 import java.time.format.TextStyle
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var db: AppDatabase
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java,
+            "AppDatabase"
+        )   .fallbackToDestructiveMigration()
+            .build()
+
         enableEdgeToEdge()
+
         setContent {
+
+            val ViewModel: CalendarViewModel = viewModel(
+                factory = CalendarViewModelFactory(
+                    db.CalendarItemDao()
+                )
+            )
+
 
             val NowDate = LocalDate.now()
 
 
             CalendrAppConcptTheme {
-                Calendar()
+                Calendar(
+                    viewModel = ViewModel
+                )
             }
         }
     }
@@ -73,7 +98,7 @@ data class MonthData(
 
 @Composable
 fun Calendar(
-
+    viewModel: CalendarViewModel
 ) {
     val now = LocalDate.now()
 
@@ -127,8 +152,12 @@ fun Calendar(
             selectedDay = selectedDay
         )
 
-        Text(text = "Selected Day: ${selectedDay.dayOfMonth}/${selectedDay.monthValue}/${selectedDay.year}")
+//        Text(text = "Selected Day: ${selectedDay.dayOfMonth}/${selectedDay.monthValue}/${selectedDay.year}")
 
+        NotesForSpecDay(
+            Date = selectedDay,
+            viewModel = viewModel
+        )
     }
 
 
@@ -265,10 +294,42 @@ fun MonthScreen(
     }
 }
 
-@Preview(showBackground = true)
+
 @Composable
-fun GreetingPreview() {
-    CalendrAppConcptTheme {
-        Calendar()
+fun NotesForSpecDay (
+    Date: LocalDate,
+    viewModel: CalendarViewModel
+) {
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.Blue)
+    ) {
+        Text("Day: " + Date)
+
+        Button(
+            onClick = {
+                viewModel.addCalendarItem(
+                    CalendarItem(
+                        title = "Note",
+                        Icon = "Icon",
+                        Contents = "NoteCont...",
+                        date = Date
+                    )
+                )
+            }
+        ) { }
+        val todayNote = viewModel.getNotes(Date)
+
+        for (todayNote.)
+        Text(
+
+
+
+        )
+
+
     }
+
 }
