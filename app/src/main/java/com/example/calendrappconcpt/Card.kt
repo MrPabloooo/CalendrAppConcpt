@@ -3,7 +3,14 @@ package com.example.calendrappconcpt
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Icon
+import androidx.compose.ui.geometry.RoundRect
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,9 +22,16 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.BlendMode.Companion.Color
 import androidx.compose.ui.graphics.drawscope.clipPath
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,12 +40,13 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun CardScreen(
     Title: String,
-    Icon: String,
+    Icon: NoteIcon,
     Contents: String,
     AdditionalInfo: String,
     Date: String,
     Refreshable: Boolean,
-    OnRefresh: () -> Unit = {}
+    OnRefresh: () -> Unit = {},
+    color: ColorPaterns,
 ) {
     val lineHeight = 25.sp
 
@@ -61,7 +76,7 @@ fun CardScreen(
                     ) {
                         // Tło kartki
                         drawRoundRect(
-                            color = Color(0xFFFFF59D),
+                            color = Color(color.primery),
                             cornerRadius = CornerRadius(radius, radius)
                         )
 
@@ -71,7 +86,7 @@ fun CardScreen(
 
                         while (y < size.height) {
                             drawLine(
-                                color = Color(0xFFB0BEC5),
+                                color = Color(color.liness),
                                 start = Offset(0f, y),
                                 end = Offset(size.width, y),
                                 strokeWidth = 2f
@@ -82,7 +97,7 @@ fun CardScreen(
 
                         // Czerwony margines
                         drawLine(
-                            color = Color(0xFFE57373),
+                            color = Color(color.margines),
                             start = Offset(30.dp.toPx(), 0f),
                             end = Offset(30.dp.toPx(), size.height),
                             strokeWidth = 3f
@@ -102,25 +117,41 @@ fun CardScreen(
 //            modifier = Modifier.fillMaxWidth(),
 //            textAlign = TextAlign.Center,
                 fontWeight = Bold,
-                color = Color(0xFF212121),
+                color =  Color(color.textColor),
                 fontSize = 24.sp,
                 lineHeight = lineHeight
             )
 
-            Text(
-                text = Title,
+
+            Icon(
+                imageVector = Icon.toImageVector(),
+                contentDescription = "Icon",
+                tint = Color(color.textColor),
+                modifier = Modifier.size(24.dp)
+            )
+
+
+
+                Text(
+                    text = Title,
 //            modifier = Modifier.fillMaxWidth(),
 //            textAlign = TextAlign.Center,
-                fontWeight = Bold,
-                color = Color(0xFF212121),
-                fontSize = 24.sp,
-                lineHeight = lineHeight
-            )
+                    fontWeight = Bold,
+                    color = Color(color.textColor),
+                    fontSize = 24.sp,
+                    lineHeight = lineHeight
+                )
+
+
+
+
+
+
 
             Text(
                 text = Contents,
                 fontSize = 9.sp,
-                color = Color(0xFF212121),
+                color = Color(color.textColor),
 
                 lineHeight = lineHeight
             )
@@ -128,14 +159,14 @@ fun CardScreen(
             Text(
                 text = "",
                 fontSize = 9.sp,
-                color = Color(0xFF212121),
+                color = Color(color.textColor),
                 lineHeight = lineHeight
             )
 
             Text(
                 text = AdditionalInfo,
                 fontSize = 9.sp,
-                color = Color(0xFF212121),
+                color = Color(color.textColor),
                 lineHeight = lineHeight
             )
         }
@@ -164,16 +195,23 @@ fun CardScreen(
     }
 }
 
+
+
+
 @Preview(showBackground = true)
 @Composable
 fun CardScreenPreview() {
     CardScreen(
-        Title = "Wakacje",
-        Icon = "Icon",
+        Title = "To jest treść mojej notatki która również może być Wakacje",
+        Icon = NoteIcon.SHOPPING,
         Contents = "To jest treść mojej notatki która również może być dłuższa i zawijać się na kolejne linie.",
         AdditionalInfo = "Dodatkowe informacje",
         Date = "03.09.2026",
-        Refreshable = true
+        Refreshable = true,
+        color = ColorsOfNotes.Yellow.toColorPaterns()
     )
 }
+
+
+
 

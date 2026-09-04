@@ -387,6 +387,7 @@ fun NotesForSpecDay(
                 AdditionalInfo = "",
                 Date = item.date.toString(),
                 Refreshable = false,
+                color = item.color.toColorPaterns()
 
             )
 

@@ -1,5 +1,6 @@
 package com.example.calendrappconcpt
 
+import androidx.compose.ui.graphics.Color
 import androidx.room.TypeConverter
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -17,5 +18,15 @@ class Converters {
     @TypeConverter
     fun dateToTimestamp(date: LocalDate?): String? {
         return date?.format(formatter)
+    }
+
+    @TypeConverter
+    fun fromColor(color: Color): Long {
+        return color.value.toLong()
+    }
+
+    @TypeConverter
+    fun toColor(value: Long): Color {
+        return Color(value.toULong())
     }
 }

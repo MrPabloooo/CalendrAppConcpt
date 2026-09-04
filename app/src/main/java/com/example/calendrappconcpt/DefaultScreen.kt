@@ -112,7 +112,8 @@ fun DefaultScreen(
                         OnRefresh = {
                           viewModel.getRandomById()
                         },
-                        Refreshable = true
+                        Refreshable = true,
+                        color = randomNote!!.color.toColorPaterns()
                     )
 
 
@@ -161,7 +162,7 @@ fun DefaultScreen(
             .getNotes(todayDate)
             .collectAsState(initial = emptyList())
 
-        val canAddNewNote = notes.size <= 1
+        val canAddNewNote = notes.size < 100
 
         IconButton(
             onClick = {

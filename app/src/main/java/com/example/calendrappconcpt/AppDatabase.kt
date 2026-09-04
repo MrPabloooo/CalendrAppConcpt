@@ -6,9 +6,11 @@ import androidx.room.TypeConverters
 
 @Database(
 entities = [CalendarItem::class],
-version = 1
+version = 4
 )
-@TypeConverters(Converters::class)
+@TypeConverters(Converters::class,
+    Converter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun CalendarItemDao(): CalendarItemDao
 }
+
