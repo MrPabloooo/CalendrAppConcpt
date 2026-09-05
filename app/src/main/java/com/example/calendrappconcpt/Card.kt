@@ -29,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.BlendMode.Companion.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -37,6 +38,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
+
 @Composable
 fun CardScreen(
     Title: String,
@@ -123,13 +126,12 @@ fun CardScreen(
             )
 
 
-            Icon(
-                imageVector = Icon.toImageVector(),
+            AsyncImage(
+                model = "file:///android_asset/${Icon.toSvgName()}",
                 contentDescription = "Icon",
-                tint = Color(color.textColor),
+                colorFilter = ColorFilter.tint(Color(color.textColor)),
                 modifier = Modifier.size(24.dp)
             )
-
 
 
                 Text(
@@ -201,15 +203,23 @@ fun CardScreen(
 @Preview(showBackground = true)
 @Composable
 fun CardScreenPreview() {
-    CardScreen(
-        Title = "To jest treść mojej notatki która również może być Wakacje",
-        Icon = NoteIcon.SHOPPING,
-        Contents = "To jest treść mojej notatki która również może być dłuższa i zawijać się na kolejne linie.",
-        AdditionalInfo = "Dodatkowe informacje",
-        Date = "03.09.2026",
-        Refreshable = true,
-        color = ColorsOfNotes.Yellow.toColorPaterns()
-    )
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        CardScreen(
+            Title = "Notatkaaaa ",
+            Icon = NoteIcon.SHOPPING,
+            Contents = "To jest treść mojej notatki która również może być dłuższa i zawijać się na kolejne linie. Fajne cn???",
+            AdditionalInfo = "67 days ago",
+            Date = "03.09.2026",
+            Refreshable = false,
+            color = ColorsOfNotes.Blueprint.toColorPaterns()
+        )
+    }
+
 }
 
 

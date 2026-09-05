@@ -1,6 +1,7 @@
 package com.example.calendrappconcpt
 
 import android.graphics.drawable.Icon
+import android.widget.Button
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +36,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
-
+import kotlin.math.absoluteValue
+import kotlin.random.Random
 
 
 @Composable
@@ -107,7 +109,7 @@ fun DefaultScreen(
                         Title = randomNote!!.title,
                         Icon = randomNote!!.Icon,
                         Contents = randomNote!!.Contents,
-                        AdditionalInfo = "$days days ago",
+                        AdditionalInfo = "${days?.absoluteValue} days ago",
                         Date = randomNote!!.date.toString(),
                         OnRefresh = {
                           viewModel.getRandomById()
@@ -143,14 +145,61 @@ fun DefaultScreen(
                 month = month,
                 onCalendarClick = {
                     onCalendarClick()
-                }
+                },
+                viewModel = viewModel
             )
+
 
         }
 
 
+        Button(
+            onClick = {
 
 
+                    val endDate = LocalDate.now()
+                    val startDate = endDate.minusMonths(2)
+
+                    val randomDate = startDate.plusDays(
+                        Random.nextLong(
+                            ChronoUnit.DAYS.between(startDate, endDate) + 1
+                        )
+                    )
+
+
+                    viewModel.addCalendarItem(
+                        CalendarItem(
+                            title = "Test note item",
+                            Icon = NoteIcon.valueOf(
+                                (NoteIcon.values()).random().name
+                            ),
+                            Contents = "Test ONLY note!!!",
+                            date = randomDate,
+                            color = ColorsOfNotes.valueOf(
+                                (ColorsOfNotes.values()).random().name
+                            )
+
+                        )
+                    )
+
+
+
+
+                Toast.makeText(
+                    context,
+                    "Added random note",
+                    Toast.LENGTH_SHORT
+                ).show()
+            },
+        ) {
+            Text(text = "AddRandom <-TEST--ONLY-> ")
+        }
+
+
+
+        val count by viewModel.calendarItemsCount.collectAsState(initial = 0)
+
+        Text("$count")
 
 
     }

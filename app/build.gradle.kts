@@ -62,6 +62,9 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
 
+    implementation("io.coil-kt.coil3:coil-compose:3.3.0")
+    implementation("io.coil-kt.coil3:coil-svg:3.3.0")
+
     implementation("androidx.datastore:datastore-preferences:1.1.7")
 
     implementation("androidx.navigation:navigation-compose:2.9.3")

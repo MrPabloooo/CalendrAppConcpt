@@ -4,23 +4,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 
-fun NoteIcon.toImageVector(): ImageVector {
+fun NoteIcon.toSvgName(): String {
     return when (this) {
-        NoteIcon.DEFAULT -> Icons.Default.ShoppingCart
-        NoteIcon.WORK -> Icons.Default.Favorite
-        NoteIcon.SCHOOL -> Icons.Default.Notifications
-        NoteIcon.IDEA -> Icons.Default.Lock
-        NoteIcon.MUSIC -> Icons.Default.Person
-        NoteIcon.MOVIE -> Icons.Default.Star
-        NoteIcon.SHOPPING -> Icons.Default.ShoppingCart
-        NoteIcon.IMPORTANT -> Icons.Default.Done
-        NoteIcon.SCENE -> Icons.Default.Favorite
-        NoteIcon.DEF -> Icons.Default.ShoppingCart
-        NoteIcon.RANDOMVALUE -> Icons.Default.ShoppingCart
-        NoteIcon.KOTLIN -> Icons.Default.ShoppingCart
-        NoteIcon.ROSY -> Icons.Default.ShoppingCart
-        NoteIcon.PORANEK -> Icons.Default.ShoppingCart
-        NoteIcon.IKONA -> Icons.Default.ShoppingCart
-
+        NoteIcon.DEFAULT -> "1.svg"
+        NoteIcon.WORK -> "2.svg"
+        NoteIcon.SCHOOL -> "3.svg"
+        NoteIcon.IDEA -> "4.svg"
+        NoteIcon.MUSIC -> "5.svg"
+        NoteIcon.MOVIE -> "6.svg"
+        NoteIcon.SHOPPING -> "7.svg"
+        NoteIcon.IMPORTANT -> "7.svg"
+        NoteIcon.SCENE -> "7.svg"
+        NoteIcon.DEF -> "7.svg"
+        NoteIcon.RANDOMVALUE -> "7.svg"
+        NoteIcon.KOTLIN -> "7.svg"
+        NoteIcon.ROSY -> "7.svg"
+        NoteIcon.PORANEK -> "7.svg"
+        NoteIcon.IKONA -> "7.svg"
     }
 }

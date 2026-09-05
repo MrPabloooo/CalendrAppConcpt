@@ -34,10 +34,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import coil3.compose.AsyncImage
 import java.time.LocalDate
 import kotlin.math.roundToInt
 
@@ -100,11 +102,12 @@ fun AdderScreen(
                     }
                 ) {
 
-                    Icon(
-                        imageVector = icon.toImageVector(),
-                        contentDescription = icon.name,
-                        tint = if (iconSelected == icon) Color.Red else Color.Black
-                    )
+                    AsyncImage(
+                        model = "file:///android_asset/${icon.toSvgName()}",
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(
+                            if (iconSelected == icon) Color.Red else Color.Black
+                        )                    )
 
                 }
 

@@ -42,6 +42,22 @@ class CalendarViewModel(
             date.format(DateTimeFormatter.ISO_LOCAL_DATE)
         )
 
+    fun getAllNotes(): Flow<List<CalendarItem>> {
+        return dao.getAll()
+    }
+    val calendarItemsCount: Flow<Int> =
+        dao.getAll().map { it.size }
+
+
+
+    fun getRandomNoteForSpecDay(date: LocalDate): Flow<CalendarItem?> {
+        return dao.getNoteForDay(
+            date.format(DateTimeFormatter.ISO_LOCAL_DATE)
+        ).map { notes ->
+            notes.randomOrNull()
+        }
+    }
+
     fun logDatabase() {
         viewModelScope.launch {
 

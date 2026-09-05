@@ -29,5 +29,10 @@ interface CalendarItemDao {
     suspend fun getRandomItem(): CalendarItem?
 
 
+    @Query("SELECT * FROM calendaritem WHERE date = :date ORDER BY RANDOM() LIMIT 1")
+    suspend fun getRandomItemByDate(date: LocalDate): CalendarItem?
+
+
+
 
 }
