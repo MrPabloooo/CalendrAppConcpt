@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,9 +33,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -93,9 +98,32 @@ fun AdderScreen(
 //        )
 
 
-        var iconSelected by remember {
+        var iconSelected by rememberSaveable {
             mutableStateOf(NoteIcon.DEFAULT)
         }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+
+            IconButton(
+                onClick = {
+                    onFinish()
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Previous"
+                )
+            }
+
+        }
+
+
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -127,7 +155,13 @@ fun AdderScreen(
                     modifier = Modifier.size(28.dp),
                     contentScale = ContentScale.Fit,
                     colorFilter = ColorFilter.tint(
-                        if (iconSelected == icon) Color.White else Color.DarkGray
+                        if (isSystemInDarkTheme()) {
+                            if (iconSelected == icon) Color.White else Color.DarkGray
+                        }
+                        else {
+                            if (iconSelected == icon) Color.Black else Color.Gray
+
+                        }
                     ),
 
                 )
@@ -150,14 +184,16 @@ fun AdderScreen(
 
         ) {
             for (color in ColorsOfNotes.values()) {
+                val paperColor = Color(if (isSystemInDarkTheme()) color.toColorPaterns().primery else color.toColorPaterns().primeryDark)
 
                 Box(
 
-                        modifier = Modifier
+
+                modifier = Modifier
                             .padding(5.dp)
                             .size(50.dp)
                             .background(
-                                Color(color.toColorPaterns().primery).copy(
+                                paperColor.copy(
                                     alpha = if (selectedColor != color) {
                                         0.25f
                                     } else {
@@ -169,7 +205,7 @@ fun AdderScreen(
                             )
                             .border(
                                 width = 1.dp,
-                                color = Color(color.toColorPaterns().primery),
+                                color = paperColor,
                                 shape = RoundedCornerShape(5.dp)
                             )
 

@@ -3,6 +3,7 @@ package com.example.calendrappconcpt
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -64,6 +65,9 @@ fun CardScreenLegacy(
     color: ColorPaterns,
 ) {
     val lineHeight = 25.dp
+
+//    val dynamicColor = if (isSystemInDarkTheme()) Color.White else Color.Black
+
 
     Column(
         modifier = Modifier
@@ -368,10 +372,11 @@ fun CardScreen(
     color: ColorPaterns,
 ) {
 
-    val paperColor = Color(color.primery)
-    val textColor = Color(color.textColor)
-    val lineColor = Color(color.liness)
-    val marginColor = Color(color.margines)
+
+    val paperColor = Color(if (isSystemInDarkTheme()) color.primery else color.primeryDark)
+    val textColor = Color(if (isSystemInDarkTheme()) color.textColor else color.textColorDark)
+    val lineColor = Color(if (isSystemInDarkTheme()) color.liness else color.linessDark)
+    val marginColor = Color(if (isSystemInDarkTheme()) color.margines else color.marginesDark)
 
     val clipboard = LocalClipboardManager.current
 
@@ -614,6 +619,7 @@ fun CardScreenPreview() {
 
 
 
+
 @Composable
 private fun LinedTextField(
     value: String,
@@ -675,6 +681,8 @@ private fun LinedTextField(
                         )
                     }
                 }
+
+
             },
 
         textStyle = TextStyle(
@@ -743,17 +751,10 @@ fun CardScreen1(
 
     ) {
 
-    val paperColor =
-        Color(color.primery)
-
-    val textColor =
-        Color(color.textColor)
-
-    val lineColor =
-        Color(color.liness)
-
-    val marginColor =
-        Color(color.margines)
+    val paperColor = Color(if (isSystemInDarkTheme()) color.primery else color.primeryDark)
+    val textColor = Color(if (isSystemInDarkTheme()) color.textColor else color.textColorDark)
+    val lineColor = Color(if (isSystemInDarkTheme()) color.liness else color.linessDark)
+    val marginColor = Color(if (isSystemInDarkTheme()) color.margines else color.marginesDark)
 
 
     Column {

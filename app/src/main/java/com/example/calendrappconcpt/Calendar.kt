@@ -1,7 +1,10 @@
 package com.example.calendrappconcpt
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,9 +29,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -45,7 +50,7 @@ fun CalendarForMonth(
     onCalendarClick: () -> Unit,
     viewModel: CalendarViewModel
 ) {
-
+    val dynamicColor = if (isSystemInDarkTheme()) Color.White else Color.Black
 
 
 
@@ -53,58 +58,81 @@ fun CalendarForMonth(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable {
+        modifier = Modifier.clickable(
+            indication = null,
+            interactionSource = remember { MutableInteractionSource() }
+        ) {
             onCalendarClick()
         }
-
-        ) {
-
-
-
-
+    ) {
 
         Column(
-            modifier = Modifier.wrapContentWidth()
+            modifier = Modifier
+                .wrapContentWidth()
                 .verticalScroll(rememberScrollState())
         ) {
 
-
             for (weekStart in 1..month.days step 7) {
 
+                Row {
+                    val endDay = minOf(
+                        weekStart + 7,
+                        month.days + 1
+                    )
 
-                Row(
-                ) {
-                    val endDay = minOf(weekStart + 7, month.days + 1)
+                    for (day in weekStart until endDay) {
 
-                    for (day in weekStart until minOf(weekStart + 7, month.days + 1)) {
+                        val date = LocalDate.of(
+                            month.year,
+                            month.month,
+                            day
+                        )
 
-                        if(LocalDate.now().dayOfMonth == day && LocalDate.now().monthValue == month.month && LocalDate.now().year == month.year) {
+                        val notesRan = remember(date) {
+                            viewModel.getRandomNoteForSpecDay(date)
+                        }.collectAsState(initial = null)
+
+                        if (
+                            LocalDate.now().dayOfMonth == day &&
+                            LocalDate.now().monthValue == month.month &&
+                            LocalDate.now().year == month.year
+                        ) {
                             Box(
                                 modifier = Modifier
                                     .padding(4.dp)
-//                            .size(60.dp)
                                     .weight(1f)
                                     .aspectRatio(1f)
-                                    .background(
-                                        color =
-                                            if (LocalDate.now().dayOfMonth == day && LocalDate.now().monthValue == month.month && LocalDate.now().year == month.year) {
-                                                Color.Red
-                                            } else {
-
-                                                Color.Blue
-
-                                            },
-                                        shape = if (LocalDate.now().dayOfMonth == day && LocalDate.now().monthValue == month.month && LocalDate.now().year == month.year) {
-                                            CircleShape
-                                        } else {
-
-                                            RoundedCornerShape(25f)
-                                        },
-                                    ),
-
+                                    .border(
+                                        width = 1.dp,
+                                        color = dynamicColor,
+                                        shape = CircleShape
+                                    )
+                                    .padding(8.dp),
                                 contentAlignment = Alignment.Center
                             ) {
 //                            Text(text = day.toString())
+
+                                if (notesRan.value != null) {
+                                    AsyncImage(
+                                        model = "file:///android_asset/${notesRan.value?.Icon?.toSvgName()}",
+                                        contentDescription = "IconTDY",
+                                                colorFilter = ColorFilter.tint(
+
+                                                color = Color.White
+                                                ),
+                                    )
+                                }
+
+                                if (notesRan.value == null) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(10.dp)
+                                            .background(
+                                                color = dynamicColor,
+                                                shape = RoundedCornerShape(100f)
+                                            )
+                                    ) { }
+                                }
                             }
                         }
                         else {
@@ -117,9 +145,7 @@ fun CalendarForMonth(
 
                                 contentAlignment = Alignment.Center
                             ) {
-                                val notesRan = viewModel.getRandomNoteForSpecDay(LocalDate.of(month.year, month.month, day)).collectAsState(
-                                    initial = null
-                                )
+
 
 
                                 if (notesRan.value != null) {
@@ -128,35 +154,40 @@ fun CalendarForMonth(
                                             .padding(4.dp)
 //                            .size(60.dp)
 //                                            .weight(1f)
-                                            .aspectRatio(1f)
-                                            .background(
-                                                color =
-                                                    if (LocalDate.now().dayOfMonth == day && LocalDate.now().monthValue == month.month && LocalDate.now().year == month.year) {
-                                                        Color.Red
-                                                    } else {
-
-                                                        Color.Blue
-
-                                                    },
-                                                shape = if (LocalDate.now().dayOfMonth == day && LocalDate.now().monthValue == month.month && LocalDate.now().year == month.year) {
-                                                    CircleShape
-                                                } else {
-
-                                                    RoundedCornerShape(25f)
-                                                },
-                                            ),
+                                            .aspectRatio(1f),
+//                                            .background(
+//                                                color =
+//                                                    if (LocalDate.now().dayOfMonth == day && LocalDate.now().monthValue == month.month && LocalDate.now().year == month.year) {
+//                                                        Color.Red
+//                                                    } else {
+//
+//                                                        Color.Blue
+//
+//                                                    },
+//                                                shape = if (LocalDate.now().dayOfMonth == day && LocalDate.now().monthValue == month.month && LocalDate.now().year == month.year) {
+//                                                    CircleShape
+//                                                } else {
+//
+//                                                    RoundedCornerShape(25f)
+//                                                },
+//                                            ),
 
                                         contentAlignment = Alignment.Center
                                     ) {
                                         AsyncImage(
-                                            model = "file:///android_asset/${notesRan.value!!.Icon.toSvgName()}",
+                                            model = "file:///android_asset/${notesRan.value?.Icon?.toSvgName()}",
 
 
 
 
 
 
-                                            contentDescription = "Icon"
+                                            contentDescription = "Icon",
+
+
+                                                    colorFilter = ColorFilter.tint(
+                                                        color = dynamicColor
+                                                    ),
                                         )
                                     }
                                 }
@@ -165,7 +196,7 @@ fun CalendarForMonth(
                                         modifier = Modifier
                                             .size(5.dp)
                                             .background(
-                                                color = Color.Red,
+                                                color = dynamicColor,
                                                 shape = RoundedCornerShape(100f)
                                             )
                                     ) { }
