@@ -99,11 +99,6 @@ fun ColorsOfNotes.toColorPaterns(): ColorPaterns {
             textColor = 0xFFF5F5F5  // soft off-white to stand out on solid blue
         )
 
-        ColorsOfNotes.Midnight -> ColorPaterns( // High-contrast Dark Mode
-            primery = 0xFF121212,
-            liness = 0xFF333333,
-            margines = 0xFF00E676,
-            textColor = 0xFFBDBDBD  // muted gray, allows the margin to be the main focal point
-        )
+
     }
 }

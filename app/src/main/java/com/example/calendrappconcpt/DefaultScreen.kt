@@ -156,6 +156,8 @@ fun DefaultScreen(
         Button(
             onClick = {
 
+                for (i in 1..100) {
+
 
                     val endDate = LocalDate.now()
                     val startDate = endDate.minusMonths(2)
@@ -182,7 +184,7 @@ fun DefaultScreen(
                         )
                     )
 
-
+                }
 
 
                 Toast.makeText(

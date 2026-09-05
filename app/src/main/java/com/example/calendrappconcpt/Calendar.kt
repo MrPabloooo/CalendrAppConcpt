@@ -29,8 +29,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.error
+import coil3.request.fallback
+import coil3.request.placeholder
 import java.time.LocalDate
 
 
@@ -145,6 +150,11 @@ fun CalendarForMonth(
                                     ) {
                                         AsyncImage(
                                             model = "file:///android_asset/${notesRan.value!!.Icon.toSvgName()}",
+
+
+
+
+
 
                                             contentDescription = "Icon"
                                         )

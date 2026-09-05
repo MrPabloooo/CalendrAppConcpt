@@ -1,6 +1,7 @@
 package com.example.calendrappconcpt
 
 import android.graphics.Color.alpha
+import android.widget.Button
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,8 +11,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -35,11 +38,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.error
+import coil3.request.fallback
+import coil3.request.placeholder
 import java.time.LocalDate
 import kotlin.math.roundToInt
 
@@ -62,32 +71,33 @@ fun AdderScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text(text = "Adder")
 
 
-        InputTextElement(
-            title = "Title",
-            hint = "Title",
-            value = title,
-            onValueChange = {
-                title = it
-            }
-        )
 
-        InputTextElement(
-            title = "Contents",
-            hint = "Contents",
-            value = contents,
-            onValueChange = {
-                contents = it
-            }
-        )
+//        InputTextElement(
+//            title = "Title",
+//            hint = "Title",
+//            value = title,
+//            onValueChange = {
+//                title = it
+//            }
+//        )
+//
+//        InputTextElement(
+//            title = "Contents",
+//            hint = "Contents",
+//            value = contents,
+//            onValueChange = {
+//                contents = it
+//            }
+//        )
 
 
         var iconSelected by remember {
             mutableStateOf(NoteIcon.DEFAULT)
         }
 
+        Spacer(modifier = Modifier.height(10.dp))
 
         Row(
             modifier = Modifier
@@ -97,19 +107,31 @@ fun AdderScreen(
         ) {
             for (icon in NoteIcon.values()) {
                 IconButton(
-                    onClick = {
-                        iconSelected = icon
-                    }
-                ) {
+                onClick = {
+                    iconSelected = icon
+                },
+                modifier = Modifier.size(48.dp)
+            ) {
+                AsyncImage(
+//                    model = "file:///android_asset/${icon.toSvgName()}",
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data("file:///android_asset/${icon.toSvgName()}")
+                        // Keep crossfade OFF when using a placeholder of a different shape
+                        .placeholder(R.drawable.outline_image_24)
+                        .error(R.drawable.outline_image_24)
+                        .fallback(R.drawable.outline_image_24)
+                        .build(),
 
-                    AsyncImage(
-                        model = "file:///android_asset/${icon.toSvgName()}",
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(
-                            if (iconSelected == icon) Color.Red else Color.Black
-                        )                    )
 
-                }
+                    contentDescription = null,
+                    modifier = Modifier.size(28.dp),
+                    contentScale = ContentScale.Fit,
+                    colorFilter = ColorFilter.tint(
+                        if (iconSelected == icon) Color.White else Color.DarkGray
+                    ),
+
+                )
+            }
 
             }
         }
@@ -168,15 +190,32 @@ fun AdderScreen(
 
         }
 
-        CardScreen(
+//        CardScreen(
+//            Title = title,
+//            Icon = iconSelected,
+//            Contents = contents,
+//            AdditionalInfo = "",
+//            Date = "",
+//            Refreshable = false,
+//            color = selectedColor.toColorPaterns()
+//        )
+
+
+
+        CardScreen1(
             Title = title,
             Icon = iconSelected,
             Contents = contents,
-            AdditionalInfo = "",
-            Date = "",
-            Refreshable = false,
-            color = selectedColor.toColorPaterns()
-        )
+
+            onTitleChange = {
+                title = it
+            },
+            onContentsChange = {
+                contents = it
+            },
+            color = selectedColor.toColorPaterns(),
+
+            )
 
 
 
@@ -223,12 +262,11 @@ fun InputTextElement(
     onValueChange: (String) -> Unit
 
 ) {
-    Row(
+    Column (
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Title")
+        Text(text = title)
 
 
 
@@ -237,13 +275,13 @@ fun InputTextElement(
 
             onValueChange = onValueChange,
 
-            modifier = Modifier.width(150.dp),
-            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+//            singleLine = true,
 //            keyboardOptions = KeyboardOptions(
 //                keyboardType = KeyboardType.Number
 //            ),
             placeholder = {
-                Text(text = "Title")
+                Text(text = hint)
             }
         )
 

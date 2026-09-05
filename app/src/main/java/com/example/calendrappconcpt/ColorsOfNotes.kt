@@ -10,6 +10,5 @@ enum class ColorsOfNotes {
     Kraft,
     Lavender,
     Blueprint,
-    Midnight
 
 }
