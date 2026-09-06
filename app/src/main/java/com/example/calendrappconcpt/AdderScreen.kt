@@ -35,6 +35,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -177,6 +178,9 @@ fun AdderScreen(
         var selectedColor by rememberSaveable {
             mutableStateOf(ColorsOfNotes.Yellow)
         }
+        val paperColorMain = Color(if (isSystemInDarkTheme()) selectedColor.toColorPaterns().primery else selectedColor.toColorPaterns().primeryDark)
+        val paperColorTextMain = Color(if (isSystemInDarkTheme()) selectedColor.toColorPaterns().textColor else selectedColor.toColorPaterns().textColorDark)
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -256,7 +260,20 @@ fun AdderScreen(
 
 
 
+        var IsNoteQueued: Boolean by remember { mutableStateOf(false) }
+
+        key(
+            IsNoteQueued
+        ) {
+            if (IsNoteQueued){
+                onFinish()
+            }
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+
         Button(
+            modifier = Modifier
+                .width(200.dp),
             onClick = {
                 if (title.isEmpty() || contents.isEmpty()) {
                     Toast.makeText(
@@ -266,21 +283,30 @@ fun AdderScreen(
                     ).show()
                     return@Button
                 } else {
-                    viewModel.addCalendarItem(
-                        CalendarItem(
-                            title = title,
-                            Icon = iconSelected,
-                            Contents = contents,
-                            date = LocalDate.now(),
-                            color = selectedColor
+
+                    if (!IsNoteQueued) {
+                        viewModel.addCalendarItem(
+                            CalendarItem(
+                                title = title,
+                                Icon = iconSelected,
+                                Contents = contents,
+                                date = LocalDate.now(),
+                                color = selectedColor
+                            )
                         )
-                    )
-                    onFinish()
+                        IsNoteQueued = true
+
+                    }
                 }
-            }
+            },
+            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                containerColor = paperColorMain
+            ),
         )
         {
-            Text(text = "Add note")
+            Text(text = "Add note",
+                color = paperColorTextMain
+            )
         }
 
 
