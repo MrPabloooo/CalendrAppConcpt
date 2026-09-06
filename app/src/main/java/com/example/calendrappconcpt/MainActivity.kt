@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -206,10 +207,7 @@ fun Calendar(
 
 //        Text(text = "Selected Day: ${selectedDay.dayOfMonth}/${selectedDay.monthValue}/${selectedDay.year}")
 
-        NotesForSpecDay(
-            Date = selectedDay,
-            viewModel = viewModel
-        )
+
     }
 
 
@@ -229,10 +227,6 @@ fun MonthScreen(
 ) {
 
 
-
-
-
-
     val dynamicColor = if (isSystemInDarkTheme()) Color.White else Color.Black
 
 
@@ -244,62 +238,77 @@ fun MonthScreen(
 
         ) {
 
+        Spacer(modifier = Modifier.height(16.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-
-            IconButton(
-                onClick = {
-                    onPrevious()
-                },
-
-                ) {
-
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Previous Month"
-                )
-
-            }
-
 
             if (month.year != LocalDate.now().year) {
                 Text(
                     text = "${month.name} ${month.year} ".uppercase(),
                     fontWeight = Bold,
-                    fontSize = 32.sp
+                    fontSize = 24.sp
                 )
-            }
-            else {
+            } else {
                 Text(
                     text = ("${month.name}").uppercase(),
                     fontWeight = Bold,
-                    fontSize = 32.sp
+                    fontSize = 24.sp
 
                 )
             }
 
 
-            IconButton(
-                onClick = {
-                    onNext()
-                },
 
-                ) {
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
 
-                Icon(
-                    imageVector = Icons.Default.ArrowForward,
-                    contentDescription = "Previous Month"
-                )
+                IconButton(
+                    onClick = {
+                        onPrevious()
+                    },
+
+                    ) {
+
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Previous Month"
+                    )
+
+                }
+
+
+
+                Spacer(Modifier.width(16.dp))
+
+
+                IconButton(
+                    onClick = {
+                        onNext()
+                    },
+
+                    ) {
+
+                    Icon(
+                        imageVector = Icons.Default.ArrowForward,
+                        contentDescription = "Previous Month"
+                    )
+
+                }
 
             }
+
 
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+
 
 
 
@@ -310,126 +319,164 @@ fun MonthScreen(
                 .verticalScroll(rememberScrollState())
         ) {
 
-            for (weekStart in 1..month.days step 7) {
+            Spacer(modifier = Modifier.height(32.dp))
+
+
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+
+                listOf("Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun").forEach { name ->
+
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(4.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = name,
+                            fontWeight = Bold,
+                            fontSize = 12.sp
+                        )
+                    }
+                }
+            }
+
+            val firstDay = LocalDate.of(
+                month.year,
+                month.month,
+                1
+            )
+
+            val emptyDays = firstDay.dayOfWeek.value - 1
+
+            var day = 1
+
+            while (day <= month.days || day == 1) {
 
                 Row {
-                    val endDay = minOf(
-                        weekStart + 7,
-                        month.days + 1
-                    )
 
-                    for (day in weekStart until endDay) {
+                    for (column in 0 until 7) {
 
-                        val date = LocalDate.of(
-                            month.year,
-                            month.month,
-                            day
-                        )
+                        if (day == 1 && column < emptyDays) {
 
-                        val notesRan = remember(date) {
-                            viewModel.getRandomNoteForSpecDay(date)
-                        }.collectAsState(initial = null)
-
-                        if (
-                            LocalDate.now().dayOfMonth == day &&
-                            LocalDate.now().monthValue == month.month &&
-                            LocalDate.now().year == month.year
-                        ) {
                             Box(
                                 modifier = Modifier
-                                    .clickable(
-                                    indication = null,
-                                    interactionSource = remember { MutableInteractionSource() }
-                                ) {
-                                        SelectedDayUnit(day, month.month, month.year)
-                                    }
-                                    .padding(4.dp)
                                     .weight(1f)
                                     .aspectRatio(1f)
-                                    .border(
+                                    .padding(4.dp)
+                            )
 
-                                        width =
+                        } else if (day <= month.days) {
 
-                                            if (selectedDay.dayOfMonth == day && selectedDay.monthValue == month.month && selectedDay.year == month.year) {
-                                                1.dp
-                                            }
-                                        else {
-                                                3.dp
-                                            },
 
-                                        color = dynamicColor,
-                                        shape = CircleShape
-                                    )
-                                    .padding(10.dp),
-                                contentAlignment = Alignment.Center
+                            /////////////////////////////////////////////////////////////////
+                            val date = LocalDate.of(
+                                month.year,
+                                month.month,
+                                day
+                            )
+
+                            val currentDay = day
+
+                            val notesRan = remember(date) {
+                                viewModel.getRandomNoteForSpecDay(date)
+                            }.collectAsState(initial = null)
+
+                            if (
+                                LocalDate.now().dayOfMonth == currentDay &&
+                                LocalDate.now().monthValue == month.month &&
+                                LocalDate.now().year == month.year
                             ) {
+                                Box(
+                                    modifier = Modifier
+                                        .clickable(
+                                            indication = null,
+                                            interactionSource = remember { MutableInteractionSource() }
+                                        ) {
+                                            SelectedDayUnit(currentDay, month.month, month.year)
+                                        }
+                                        .padding(4.dp)
+                                        .weight(1f)
+                                        .aspectRatio(1f)
+                                        .border(
+
+                                            width =
+
+                                                if (selectedDay.dayOfMonth == currentDay && selectedDay.monthValue == month.month && selectedDay.year == month.year) {
+                                                    1.dp
+                                                } else {
+                                                    3.dp
+                                                },
+
+                                            color = dynamicColor,
+                                            shape = CircleShape
+                                        )
+                                        .padding(10.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
 //                            Text(text = day.toString())
 
-                                if (notesRan.value != null) {
-                                    AsyncImage(
-                                        model = "file:///android_asset/${notesRan.value?.Icon?.toSvgName()}",
-                                        contentDescription = "IconTDY",
-                                        colorFilter = ColorFilter.tint(
+                                    if (notesRan.value != null) {
+                                        AsyncImage(
+                                            model = "file:///android_asset/${notesRan.value?.Icon?.toSvgName()}",
+                                            contentDescription = "IconTDY",
+                                            colorFilter = ColorFilter.tint(
 
-                                            color = Color.White
-                                        ),
-                                    )
-                                }
-
-                                if (notesRan.value == null) {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(10.dp)
-                                            .background(
-                                                color = dynamicColor,
-                                                shape = RoundedCornerShape(100f)
-                                            )
-                                    ) { }
-                                }
-                            }
-                        }
-                        else {
-                            Box(
-                                modifier = Modifier
-                                    .clickable(
-                                        indication = null,
-                                        interactionSource = remember { MutableInteractionSource() }
-                                    ) {
-                                        SelectedDayUnit(day, month.month, month.year)
+                                                color = Color.White
+                                            ),
+                                        )
                                     }
-                                    .padding(4.dp)
+
+                                    if (notesRan.value == null) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(10.dp)
+                                                .background(
+                                                    color = dynamicColor,
+                                                    shape = RoundedCornerShape(100f)
+                                                )
+                                        ) { }
+                                    }
+                                }
+                            } else {
+                                Box(
+                                    modifier = Modifier
+                                        .clickable(
+                                            indication = null,
+                                            interactionSource = remember { MutableInteractionSource() }
+                                        ) {
+                                            SelectedDayUnit(currentDay, month.month, month.year)
+                                        }
+                                        .padding(4.dp)
 
 //                            .size(60.dp)
-                                    .weight(1f)
-                                    .aspectRatio(1f)
-                                    .border(
-                                        width = 1.dp,
-                                        color =
-                                            if (selectedDay.dayOfMonth == day && selectedDay.monthValue == month.month && selectedDay.year == month.year) {
-                                                dynamicColor
-                                            }
-                                        else {
-                                            Color.Transparent
-                                            }
+                                        .weight(1f)
+                                        .aspectRatio(1f)
+                                        .border(
+                                            width = 1.dp,
+                                            color =
+                                                if (selectedDay.dayOfMonth == currentDay && selectedDay.monthValue == month.month && selectedDay.year == month.year) {
+                                                    dynamicColor
+                                                } else {
+                                                    Color.Transparent
+                                                },
+                                            shape = CircleShape
+                                        )
+                                        .padding(5.dp),
+
+                                    contentAlignment = Alignment.Center
+                                ) {
 
 
-                                        ,
-                                        shape = CircleShape
-                                    )
-                                    .padding(5.dp),
-
-                                contentAlignment = Alignment.Center
-                            ) {
-
-
-
-                                if (notesRan.value != null) {
-                                    Box(
-                                        modifier = Modifier
-                                            .padding(4.dp)
+                                    if (notesRan.value != null) {
+                                        Box(
+                                            modifier = Modifier
+                                                .padding(4.dp)
 //                            .size(60.dp)
 //                                            .weight(1f)
-                                            .aspectRatio(1f),
+                                                .aspectRatio(1f),
 //                                            .background(
 //                                                color =
 //                                                    if (LocalDate.now().dayOfMonth == day && LocalDate.now().monthValue == month.month && LocalDate.now().year == month.year) {
@@ -447,58 +494,62 @@ fun MonthScreen(
 //                                                },
 //                                            ),
 
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        AsyncImage(
-                                            model = "file:///android_asset/${notesRan.value?.Icon?.toSvgName()}",
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            AsyncImage(
+                                                model = "file:///android_asset/${notesRan.value?.Icon?.toSvgName()}",
 
 
+                                                contentDescription = "Icon",
 
 
-
-
-                                            contentDescription = "Icon",
-
-
-                                            colorFilter = ColorFilter.tint(
-                                                color = dynamicColor
-                                            ),
-                                        )
-                                    }
-                                }
-                                else {
-                                    Box(
-
-                                        modifier = Modifier
-
-                                            .size(5.dp)
-                                            .background(
-                                                color = dynamicColor,
-                                                shape = RoundedCornerShape(100f)
+                                                colorFilter = ColorFilter.tint(
+                                                    color = dynamicColor
+                                                ),
                                             )
-                                    ) { }
+                                        }
+                                    } else {
+                                        Box(
+
+                                            modifier = Modifier
+
+                                                .size(5.dp)
+                                                .background(
+                                                    color = dynamicColor,
+                                                    shape = RoundedCornerShape(100f)
+                                                )
+                                        ) { }
+                                    }
+
+
                                 }
-
-
-
                             }
+//////////////////////////////////////////
+
+
+                            day++
+
+                        } else {
+
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .aspectRatio(1f)
+                                    .padding(4.dp)
+                            )
                         }
-
-
-                    }
-
-                    repeat(7 - (endDay - weekStart)) {
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .aspectRatio(1f)
-                                .padding(4.dp)
-                        )
                     }
                 }
             }
-        }
 
+
+            NotesForSpecDay(
+                Date = selectedDay,
+                viewModel = viewModel
+            )
+
+
+        }
     }
 }
 
@@ -530,21 +581,6 @@ fun MonthScreen1(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            IconButton(
-                onClick = {
-                    onPrevious()
-                },
-
-                ) {
-
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Previous Month"
-                )
-
-            }
-
-
             if (month.year != LocalDate.now().year) {
                 Text(
                     text = "${month.name} ${month.year} ".uppercase(),
@@ -562,6 +598,37 @@ fun MonthScreen1(
             }
 
 
+
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            IconButton(
+                onClick = {
+                    onPrevious()
+                },
+
+                ) {
+
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Previous Month"
+                )
+
+            }
+
+
+
+            Spacer(Modifier.width(16.dp))
+
+
             IconButton(
                 onClick = {
                     onNext()
@@ -577,13 +644,13 @@ fun MonthScreen1(
             }
 
         }
-
         Spacer(modifier = Modifier.height(32.dp))
 
 
 
         Column(
-            modifier = Modifier.wrapContentWidth()
+            modifier = Modifier
+                .wrapContentWidth()
                 .verticalScroll(rememberScrollState())
         ) {
 
@@ -608,25 +675,22 @@ fun MonthScreen1(
 //                            .size(60.dp)
                                 .weight(1f)
                                 .aspectRatio(1f)
-                                .background(color =
-                                    if (LocalDate.now().dayOfMonth == day && LocalDate.now().monthValue == month.month && LocalDate.now().year == month.year) {
-                                        if(selectedDay.dayOfMonth == day && selectedDay.monthValue == month.month && selectedDay.year == month.year) {
-                                            Color.Red
-                                        }
-                                        else {
-                                            Color.Cyan
+                                .background(
+                                    color =
+                                        if (LocalDate.now().dayOfMonth == day && LocalDate.now().monthValue == month.month && LocalDate.now().year == month.year) {
+                                            if (selectedDay.dayOfMonth == day && selectedDay.monthValue == month.month && selectedDay.year == month.year) {
+                                                Color.Red
+                                            } else {
+                                                Color.Cyan
 
+                                            }
+                                        } else {
+                                            if (selectedDay.dayOfMonth == day && selectedDay.monthValue == month.month && selectedDay.year == month.year) {
+                                                Color.Green
+                                            } else {
+                                                Color.Blue
+                                            }
                                         }
-                                    }
-
-                                    else {
-                                        if (selectedDay.dayOfMonth == day && selectedDay.monthValue == month.month && selectedDay.year == month.year) {
-                                            Color.Green
-                                        }
-                                        else {
-                                            Color.Blue
-                                        }
-                                    }
                                 ),
 
                             contentAlignment = Alignment.Center
@@ -666,13 +730,46 @@ fun NotesForSpecDay(
 
         if (notes.isEmpty()) {
             Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+//                    .verticalScroll(
+//                        remember(Date) {
+//                            ScrollState(0)
+//                        }
+//                    ),
             ) {
-                Text(text = "No notes for this day",
-                    fontWeight = Bold,
-                    fontSize = 32.sp)
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(horizontal = 32.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = Date.dayOfWeek.name
+                        .take(3)
+                        .lowercase()
+                        .replaceFirstChar { it.uppercase() },
+                        fontWeight = Bold,)
+
+
+                    Text(text = "${Date.dayOfMonth}/${Date.monthValue}/${Date.year}")
+
+                }
+
+                Spacer(modifier = Modifier.height(64.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Text(text = "No notes for this day",
+                        fontWeight = Bold,
+                        fontSize = 32.sp)
+
+                }
+
 
             }
         }
@@ -682,13 +779,29 @@ fun NotesForSpecDay(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
-                    .verticalScroll(
-                        remember(Date) {
-                            ScrollState(0)
-                        }
-                    ),
+//                    .verticalScroll(
+//                        remember(Date) {
+//                            ScrollState(0)
+//                        }
+//                    ),
             ) {
-//        Text(text = "Day: $Date")
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(horizontal = 32.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = Date.dayOfWeek.name
+                        .take(3)
+                        .lowercase()
+                        .replaceFirstChar { it.uppercase() },
+                        fontWeight = Bold,)
+
+
+                    Text(text = "${Date.dayOfMonth}/${Date.monthValue}/${Date.year}")
+
+                }
+
 //
 //
 //
@@ -704,7 +817,7 @@ fun NotesForSpecDay(
                         Title = item.title,
                         Icon = item.Icon,
                         Contents = item.Contents,
-                        AdditionalInfo = "",
+                        AdditionalInfo = "${Date.dayOfMonth}/${Date.monthValue}/${Date.year}",
                         Date = item.date.toString(),
                         Refreshable = false,
                         color = item.color.toColorPaterns()

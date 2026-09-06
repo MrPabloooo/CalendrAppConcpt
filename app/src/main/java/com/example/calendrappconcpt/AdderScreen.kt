@@ -173,7 +173,8 @@ fun AdderScreen(
 
 
 
-        var selectedColor by remember {
+
+        var selectedColor by rememberSaveable {
             mutableStateOf(ColorsOfNotes.Yellow)
         }
         Row(

@@ -1,7 +1,5 @@
 package com.example.calendrappconcpt
 
-import android.graphics.drawable.Icon
-import android.widget.Button
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import java.time.LocalDate
@@ -65,9 +64,7 @@ fun DefaultScreen(
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
             .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
 
     ) {
@@ -90,6 +87,7 @@ fun DefaultScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
+        /*
             Text(
                 text = "Today is: ${todayDate.dayOfMonth}/${todayDate.monthValue}/${todayDate.year}",
                 modifier = Modifier
@@ -97,6 +95,8 @@ fun DefaultScreen(
                 textAlign = TextAlign.Center,
 
             )
+
+         */
 
 
 
@@ -109,7 +109,7 @@ fun DefaultScreen(
                         Title = randomNote!!.title,
                         Icon = randomNote!!.Icon,
                         Contents = randomNote!!.Contents,
-                        AdditionalInfo = "${days?.absoluteValue} days ago",
+                        AdditionalInfo = "${days?.absoluteValue} days ago\n${randomNote!!.date.dayOfMonth}/${randomNote!!.date.monthValue}/${randomNote!!.date.year}",
                         Date = randomNote!!.date.toString(),
                         OnRefresh = {
                           viewModel.getRandomById()
@@ -134,12 +134,13 @@ fun DefaultScreen(
 
 
 
+        Spacer(Modifier.height(32.dp))
 
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
+//                .weight(1f)
         ) {
             CalendarForMonth(
                 month = month,
@@ -153,6 +154,11 @@ fun DefaultScreen(
         }
 
 
+
+
+        /*
+
+        ///////// TEST UNIT FOR ADDING RANDOM NOTES (FOR TEST BUILDS) /////////
         Button(
             onClick = {
 
@@ -204,6 +210,9 @@ fun DefaultScreen(
         Text("$count")
 
 
+
+         */
+
     }
 
 
@@ -213,7 +222,7 @@ fun DefaultScreen(
             .getNotes(todayDate)
             .collectAsState(initial = emptyList())
 
-        val canAddNewNote = notes.size < 100
+        val canAddNewNote = notes.size < 999
 
         IconButton(
             onClick = {
@@ -222,19 +231,22 @@ fun DefaultScreen(
                 } else {
                     Toast.makeText(
                         context,
-                        "Limit reached",
+                        "Daily note limit reached",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .background(Color.Yellow, shape = CircleShape)
-                .size(75.dp)
+                .padding(16.dp)
+                .background(Color(0xFFE5C415), shape = CircleShape)
+                .size(60.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Adder"
+                painter = painterResource(id = R.drawable.rounded_add_24),
+                tint = Color.White,
+                contentDescription = "Adder",
+                modifier = Modifier.size(40.dp)
             )
         }
 }

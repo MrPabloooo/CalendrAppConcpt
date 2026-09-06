@@ -10,7 +10,7 @@ fun NoteIcon.toSvgName(): String {
         NoteIcon.DOM -> "2.svg"
         NoteIcon.SUNSHINE -> "3.svg"
         NoteIcon.SPIRAL -> "4.svg"
-        NoteIcon.STAR -> "5.svg"
+        NoteIcon.STAR1 -> "5.svg"
         NoteIcon.PLANTS1 -> "6.svg"
         NoteIcon.HEDGEHOG -> "7.svg"
         NoteIcon.FLOWER1 -> "8.svg"
@@ -39,6 +39,18 @@ fun NoteIcon.toSvgName(): String {
         NoteIcon.SIGNS -> "31.svg"
         NoteIcon.HOTDOG -> "33.svg"
         NoteIcon.AIRCRAFT -> "34.svg"
+        NoteIcon.DUCK1 -> "35.svg"
+        NoteIcon.PHOTO -> "36.svg"
+        NoteIcon.DOG -> "37.svg"
+        NoteIcon.COFFEE1 -> "38.svg"
+        NoteIcon.COFFEE2 -> "39.svg"
+        NoteIcon.STAR2 -> "40.svg"
+        NoteIcon.PAPER -> "41.svg"
+        NoteIcon.LOG -> "42.svg"
+        NoteIcon.DUCK2 -> "43.svg"
+        NoteIcon.FLOWER6 -> "44.svg"
+        NoteIcon.EXCAVATOR -> "45.svg"
+
 
     }
 }

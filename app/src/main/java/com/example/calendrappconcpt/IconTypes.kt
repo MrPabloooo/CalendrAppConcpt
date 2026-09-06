@@ -5,7 +5,7 @@ enum class NoteIcon {
     DOM,
     SUNSHINE,
     SPIRAL,
-    STAR,
+    STAR1,
     PLANTS1,
     HEDGEHOG,
     FLOWER1,
@@ -34,5 +34,17 @@ enum class NoteIcon {
     SIGNS,
     HOTDOG,
     AIRCRAFT,
+    DUCK1,
+    PHOTO,
+    DOG,
+    COFFEE1,
+    COFFEE2,
+    STAR2,
+    PAPER,
+    LOG,
+    DUCK2,
+    FLOWER6,
+    EXCAVATOR,
+
 }
 
