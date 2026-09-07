@@ -32,7 +32,8 @@ interface CalendarItemDao {
     @Query("SELECT * FROM calendaritem WHERE date = :date ORDER BY RANDOM() LIMIT 1")
     suspend fun getRandomItemByDate(date: LocalDate): CalendarItem?
 
-
+    @Query("SELECT DISTINCT date FROM CalendarItem ORDER BY date DESC")
+    fun getActivityDates(): Flow<List<LocalDate>>
 
 
 }

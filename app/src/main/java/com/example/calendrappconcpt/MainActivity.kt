@@ -1,11 +1,14 @@
 package com.example.calendrappconcpt
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.widget.CalendarView
 import android.widget.Space
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -69,6 +72,18 @@ class MainActivity : ComponentActivity() {
     private lateinit var db: AppDatabase
 
 
+    private val notificationPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+
+            if (isGranted) {
+                // Użytkownik zezwolił
+            } else {
+                // Użytkownik odmówił
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -80,6 +95,14 @@ class MainActivity : ComponentActivity() {
             .build()
 
         enableEdgeToEdge()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            notificationPermissionLauncher.launch(
+                Manifest.permission.POST_NOTIFICATIONS
+            )
+        }
+
+        ReminderManager.scheduleAll(this)
 
         setContent {
 
@@ -721,7 +744,7 @@ fun NotesForSpecDay(
 ) {
 
 
-    key(Date) {
+//    key(Date) {
 
 
         val notes by viewModel
@@ -826,6 +849,6 @@ fun NotesForSpecDay(
 
                 }
             }
-        }
+//        }
     }
 }
