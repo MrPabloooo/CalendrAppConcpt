@@ -158,7 +158,7 @@ fun Calendar(
 
     }
 
-    val months = (0..11).map { offset ->
+    val months = (0..1200).map { offset ->
         val date = now.minusMonths(offset.toLong())
 
         MonthData(
