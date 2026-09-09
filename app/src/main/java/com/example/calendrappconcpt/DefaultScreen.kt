@@ -57,6 +57,9 @@ fun StreakView(
 
     val dynamicColor = if (isSystemInDarkTheme()) Color.White else Color.Black
 
+    val dynamicColorDarker = if (isSystemInDarkTheme()) Color.DarkGray else Color.Gray
+
+
     val context = LocalContext.current
 
     Row(
@@ -97,10 +100,10 @@ fun StreakView(
 
         {
         Text(
-            text = "🔥 ${streak.current}${if (danger && streak.current > 0) "!" else ""}",
+            text = "🔥 ${streak.current}",
             fontSize = 16.sp,
             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
-            color = if (danger) Color.DarkGray else dynamicColor
+            color = if (danger) dynamicColorDarker else dynamicColor
 
         )
         }
