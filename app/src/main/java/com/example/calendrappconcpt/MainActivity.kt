@@ -349,7 +349,7 @@ fun MonthScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
 
-                listOf("Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun").forEach { name ->
+                listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun").forEach { name ->
 
                     Box(
                         modifier = Modifier

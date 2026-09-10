@@ -20,11 +20,19 @@ object ReminderManager {
             "Gooood Morning!!! Don't forget about your daily note!"
         )
 
+
         schedule(
             context,
-            16,
+            12,
             0,
-            "Hellooo, how is your day, maybe you should write a note?"
+            "Hiiiiii, how is your day, maybe you should write a note?"
+        )
+
+        schedule(
+            context,
+            18,
+            0,
+            "Hellooo, how was your day, your daily note is still waiting!"
         )
 
 
@@ -34,6 +42,13 @@ object ReminderManager {
             21,
             0,
             "Gooood Afternoon!!! Don't forget about your daily note!"
+        )
+
+        schedule(
+            context,
+            23,
+            0,
+            "!!!Last chance to keep your streak going!!!"
         )
     }
 
